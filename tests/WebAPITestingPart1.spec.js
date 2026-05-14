@@ -1,26 +1,21 @@
 const {test,request, expect}=require('@playwright/test');
+const {ApiUtils} =require('./utils/ApiUtils');
 
 const loginRequestData = {userEmail:"rkrchintu@gmail.com",userPassword:"Test@1234"}; // property
 
-let fetchToken;
+let response;
+let orderData;
 
 test.beforeAll(async ()=>{
 
     const apiContext=await request.newContext();
-
-    const loginResponse=await apiContext.post("https://rahulshettyacademy.com/api/ecom/auth/login",
-        {
-            data: loginRequestData
-        }
-    );
-
-    await expect(loginResponse.ok).toBeTruthy();
-    const loginResponseJson= await loginResponse.json();
-    fetchToken= loginResponseJson.token;
-    console.log("token : "+ fetchToken);
+    const apiUtil=new ApiUtils(apiContext,loginRequestData);
+    response = apiUtil.createOrder(orderData);
+    response.token =apiUtil.gettoken();
 });
 
 test("API Testing using playwright", async ({browser}) =>{
+
 
     const context= await browser.newContext();
     const page= await context.newPage();
@@ -30,7 +25,7 @@ test("API Testing using playwright", async ({browser}) =>{
     await page.addInitScript(value => {
 
         window.localStorage.setItem('token', value);
-    }, fetchToken);
+    }, response.token);
 
     await page.goto("https://rahulshettyacademy.com/client/#/dashboard/dash");
 
