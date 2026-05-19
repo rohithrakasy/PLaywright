@@ -41,7 +41,7 @@ class ApiUtils {
     console.log("Order ID: " + orderID);
     console.log("Product Id: " + orderResponseJson.productOrderId[0]);
     console.log("Message: " + orderResponseJson.message);
-    response.orderID = orderID;
+    response.orderID = orderID; 
     return response;
   }
 }
