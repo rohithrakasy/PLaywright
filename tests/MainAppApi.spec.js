@@ -1,4 +1,5 @@
 const { test, request, expect } = require("@playwright/test");
+const { MainAppUtils } = require("./utils/MainAppUtils");
 
 let testData = {
   email: "rohithkumarrakasy@gmail.com",
@@ -14,47 +15,12 @@ let taskData = {
   reference_id: "54b009e7-bdfe-4293-adbb-43feeed1f193",
 };
 
-let fetchToken;
-let taskId;
-let fetchTenantID;
-let fetchUserID;
+let taskResponse = {};
 
 test.beforeAll(async () => {
   const apiContext = await request.newContext();
-
-  const response = await apiContext.post(
-    "http://pfa-auth-alb-506540804.us-east-1.elb.amazonaws.com/apim/api/auth/userlogin",
-    { data: testData },
-  );
-
-  await expect(response.ok).toBeTruthy();
-  const responseJson = await response.json();
-  fetchToken = responseJson.token;
-  fetchTenantID = responseJson.payload.user.tenant_id.id;
-  fetchUserID = responseJson.payload.user.id;
-  console.log("Token: " + fetchToken);
-  console.log("Tenant ID: " + fetchTenantID);
-  console.log("User ID: " + fetchUserID);
-
-  //Create new task
-  const taskResponse = await apiContext.post(
-    "http://pfa-auth-alb-506540804.us-east-1.elb.amazonaws.com/apim/lead/api/tasks",
-    {
-      data: taskData,
-      headers: {
-        Authorization: `Bearer ${fetchToken}`,
-        "X-Tenant-ID": fetchTenantID,
-        "X-User-ID": fetchUserID,
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  await expect(taskResponse.ok).toBeTruthy();
-  const taskResponseJson = await taskResponse.json();
-  console.log(taskResponseJson);
-  taskId = taskResponseJson.id;
-  console.log("Task ID: " + taskId);
+  const mainUtils = new MainAppUtils(apiContext, testData);
+  taskResponse = await mainUtils.createTask(taskData);
 });
 
 test("Main App Api Test", async ({ browser }) => {
@@ -63,7 +29,7 @@ test("Main App Api Test", async ({ browser }) => {
 
   await page.addInitScript((value) => {
     window.localStorage.setItem("auth_token", value);
-  }, fetchToken);
+  }, taskResponse.token);
 
   await page.goto("https://dev.suretyforce.com/dashboard/tasks");
 
