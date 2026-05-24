@@ -18,7 +18,7 @@ const config = {
     headless: false,
     screenshot: 'on',
     // trace: 'on', // It will add trace for all failed and Passed test cases
-    trace:'reatain-on-failure',
+    trace:'on',     //reatain-on-failure --> only generates screenshots when test is failed
 
 
     viewport: null,   // ✅ ADD THIS (maximize)
