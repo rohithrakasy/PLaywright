@@ -70,9 +70,10 @@ test("Network Interception", async ({ page }) => {
   );
 
   await page.getByRole("button").filter({ hasText: "ORDERS" }).click();
+  await page.waitForResponse("https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/6865dd44129e250258c856fd")
   await page.waitForLoadState("domcontentloaded");
 
-  await page.pause();
+  //  await page.pause();
 
   // await page.locator(".table  tbody th").nth(0).waitFor();
 
