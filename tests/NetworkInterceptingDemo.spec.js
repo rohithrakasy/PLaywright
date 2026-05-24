@@ -8,6 +8,8 @@ let orderData = {
   ],
 };
 
+let fakeResponseBody = { data: [], message: "No Orders" };
+
 let token;
 
 let response = {};
@@ -52,17 +54,35 @@ test("Network Interception", async ({ page }) => {
     window.localStorage.setItem("token", value);
   }, token);
 
-  await page.goto("https://rahulshettyacademy.com/client/#/dashboard/myorders");
+  await page.goto("https://rahulshettyacademy.com/client/#/dashboard");
   await page.waitForLoadState("domcontentloaded");
 
-  await page.locator(".table  tbody th").nth(0).waitFor();
+  await page.route(
+    "https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/6865dd44129e250258c856fd",
+    async (route) => {
+      const response = await page.request.fetch(route.request());
+      let body = JSON.stringify(fakeResponseBody);
+      route.fulfill({
+        response,
+        body,
+      });
+    },
+  );
 
-  const fetchOrder = await page
-    .locator(".table  tbody th")
-    .nth(0)
-    .textContent();
+  await page.getByRole("button").filter({ hasText: "ORDERS" }).click();
+  await page.waitForResponse("https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/6865dd44129e250258c856fd")
+  await page.waitForLoadState("domcontentloaded");
 
-  console.log("fetch order: " + fetchOrder);
+  //  await page.pause();
 
-  await expect(fetchOrder).toContain(response.orderId);
+  // await page.locator(".table  tbody th").nth(0).waitFor();
+
+  // const fetchOrder = await page
+  //   .locator(".table  tbody th")
+  //   .nth(0)
+  //   .textContent();
+
+  // console.log("fetch order: " + fetchOrder);
+
+  // await expect(fetchOrder).toContain(response.orderId);
 });
