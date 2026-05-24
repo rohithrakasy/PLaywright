@@ -13,12 +13,15 @@ const orderData = {
 let response;
 
 test.beforeAll(async () => {
-  const apiContext = await request.newContext();
-  const apiUtils = new ApiUtils(apiContext, loginData);
-  response = await apiUtils.createOrder(orderData);
+  // const apiContext = await request.newContext();
+  // const apiUtils = new ApiUtils(apiContext, loginData);
+  // response = await apiUtils.createOrder(orderData);
 });
 
 test("Test Web Api", async ({ page }) => {
+  const apiContext = await request.newContext();
+  const apiUtils = new ApiUtils(apiContext, loginData);
+  response = await apiUtils.createOrder(orderData);
   await page.addInitScript((value) => {
     window.localStorage.setItem("token", value);
   }, response.token);
