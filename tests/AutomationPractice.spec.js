@@ -43,7 +43,7 @@ test('Screenshot practice Test', async({browser})=>{
     }
     
 
-    await page.pause();
+    // await page.pause();
 
 
 
