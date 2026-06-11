@@ -48,3 +48,13 @@ test('Screenshot practice Test', async({browser})=>{
 
 
 });
+
+test.only("Visual Testing",async({browser})=>{
+
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    await page.goto("https://www.google.com/");
+    
+    expect(await page.screenshot()).toMatchSnapshot('google.png');
+})

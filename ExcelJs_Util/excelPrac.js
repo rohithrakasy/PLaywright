@@ -19,7 +19,7 @@ const excelJs = require("exceljs");
 // /* Find particular value in excel */
 
 // async function writeUpdateExcel() {
-    
+
 //     const workbook = new excelJs.Workbook();
 //     await workbook.xlsx.readFile("C:/Users/rohit/Downloads/excel_download_test.xlsx");
 //     const worksheet = workbook.getWorksheet("Sheet1");
@@ -37,33 +37,67 @@ const excelJs = require("exceljs");
 
 /* Write files */
 //let rowVal,colVal;
-async function excelWriteFile() {
+// async function excelWriteFile() {
 
-    let output={
-        "row": -1,
-        "column": -1
-    }
+//     let output={
+//         "row": -1,
+//         "column": -1
+//     }
 
-    const workbook = new excelJs.Workbook();
-    await workbook.xlsx.readFile("C:/Users/rohit/Downloads/excel_download_test.xlsx");
-    const worksheet= workbook.getWorksheet('Sheet1');
-    worksheet.eachRow((row,rowNumber)=>{
-        row.eachCell((cell,colNumber)=>{
-            if(cell.value==='Orange'){
-                output.row=rowNumber;
-                output.column=colNumber;
+//     const workbook = new excelJs.Workbook();
+//     await workbook.xlsx.readFile("C:/Users/rohit/Downloads/excel_download_test.xlsx");
+//     const worksheet= workbook.getWorksheet('Sheet1');
+//     worksheet.eachRow((row,rowNumber)=>{
+//         row.eachCell((cell,colNumber)=>{
+//             if(cell.value==='Orange'){
+//                 output.row=rowNumber;
+//                 output.column=colNumber;
 
-                console.log(" row Value: "+ output.row +" Column Value is: "+ output.column);
-            }
+//                 console.log(" row Value: "+ output.row +" Column Value is: "+ output.column);
+//             }
 
-        });
-    })
+//         });
+//     })
 
-    const cell =worksheet.getCell(output.row,output.column);
-    cell.value = 'Knight Services';
+//     const cell =worksheet.getCell(output.row,output.column);
+//     cell.value = 'Knight Services';
 
-    await workbook.xlsx.writeFile("C:/Users/rohit/Downloads/excel_download_test.xlsx");
+//     await workbook.xlsx.writeFile("C:/Users/rohit/Downloads/excel_download_test.xlsx");
 
+// }
+
+// excelWriteFile();
+
+/* Refactor the code by write and read functions*/
+
+async function writeExcel(targetVal, path, searchVal) {
+  const workbook = new excelJs.Workbook();
+  await workbook.xlsx.readFile(path);
+  const worksheet = workbook.getWorksheet("Sheet1");
+
+  const output =await readExcel(worksheet,targetVal);
+
+  const cell = worksheet.getCell(output.row, output.column);
+  cell.value = searchVal;
+
+  //Save workbook after updating
+  await workbook.xlsx.writeFile(path);
 }
 
-excelWriteFile();
+async function readExcel(worksheet, targetVal) {
+  let output = {
+    row: -1,
+    column: -1,
+  };
+  worksheet.eachRow((row, rowNum) => {
+    row.eachCell((cell, colNumber) => {
+      if (cell.value === targetVal) {
+        output.row = rowNum;
+        output.column = colNumber;
+      }
+    });
+  });
+  return output;
+}
+
+writeExcel("Apple", "C:/Users/rohit/Downloads/excelInput.xlsx", "Ipad");
