@@ -1,6 +1,8 @@
-const {test, expect} = require('@playwright/test');
+const {test, expect, chromium} = require('@playwright/test');
 
-test('Screenshot practice Test', async({browser})=>{
+test('Screenshot practice Test', async()=>{
+
+    const browser = await chromium.launch({headless:false});
 
     const context= await browser.newContext();
     const page = await context.newPage();
@@ -45,16 +47,19 @@ test('Screenshot practice Test', async({browser})=>{
 
     // await page.pause();
 
+    await page.close();
 
 
 });
 
-test.only("Visual Testing",async({browser})=>{
+test("Visual Testing",async()=>{
+
+    const browser = await chromium.launch({headless:false});
 
     const context = await browser.newContext();
     const page = await context.newPage();
 
     await page.goto("https://www.google.com/");
-    
-    expect(await page.screenshot()).toMatchSnapshot('google.png');
+
+    await expect(page).toHaveScreenshot('google.png');
 })
