@@ -100,4 +100,4 @@ async function readExcel(worksheet, targetVal) {
   return output;
 }
 
-writeExcel("Apple", "C:/Users/rohit/Downloads/excelInput.xlsx", "Ipad");
+writeExcel("Apple", "C:/Users/rohit/Downloads/new.xlsx", "Ipad");
