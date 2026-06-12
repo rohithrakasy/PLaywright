@@ -65,5 +65,11 @@ test("Validate Download and upload Excel ", async () => {
   await page.locator("#fileinput").click();
   await page.locator("#fileinput").setInputFiles(filePaths);
 
-  await page.pause();
+  const textLocator = await page.getByText('Apple');
+
+  const desiredRow=await page.getByRole('row').filter({has:textLocator});
+
+  await expect(desiredRow.locator("#cell-4-undefined")).toContainText('550');
+  //await page.locator("#cell-4-undefined")
+
 });
