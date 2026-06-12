@@ -20,6 +20,7 @@
   },
   "scripts": {},
   "dependencies": {
+    "exceljs": "^4.4.0",
     "playwright": "^1.59.1",
     "playwright-core": "^1.59.1",
     "undici-types": "^7.18.2"

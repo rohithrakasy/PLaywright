@@ -1,6 +1,6 @@
 const excelJS = require("exceljs");
 
-async function performExcelwriteOperations(filepath, targetVal,expectedVal) {
+async function performExcelwriteOperations(filepath, targetVal,expectedVal,change) {
   const workbook = new excelJS.Workbook();
   await workbook.xlsx.readFile(filepath);
 
@@ -8,7 +8,7 @@ async function performExcelwriteOperations(filepath, targetVal,expectedVal) {
   const output = await readExcel(worksheet, targetVal);
   console.log("Row Number: " + output.row + " Column Number: " + output.column);
 
-  const cellVal = worksheet.getCell(output.row, output.column+2);
+  const cellVal = worksheet.getCell(output.row, output.column+change.colVal);
 
   cellVal.value = expectedVal;
 
@@ -32,7 +32,8 @@ async function readExcel(worksheet, targetVal) {
 }
 
 performExcelwriteOperations(
-  "C:/Users/rohit/Downloads/new.xlsx",
+  "C:/Users/rohit/Downloads/test.xlsx",
   "Apple",
-  350
+  350,
+  {rowVal:0,colVal:2}
 );
