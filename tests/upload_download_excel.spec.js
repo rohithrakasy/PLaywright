@@ -72,5 +72,4 @@ test("Validate Download and upload Excel ", async () => {
   await expect(desiredRow.locator("#cell-4-undefined")).toContainText('550');
   //await page.locator("#cell-4-undefined")
 
-  //await page.pause();
 });
