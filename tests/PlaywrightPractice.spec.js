@@ -15,6 +15,8 @@ test("Validate Rahul SHetty Academy ", async () => {
 
   await expect(page.locator("h1")).toHaveText("Practice Page");
 
+  await page.pause();
+
   //Click radio button
   await page.locator("input[value='radio1']").check();
 
@@ -126,7 +128,59 @@ test("Validate Rahul SHetty Academy ", async () => {
   });
   await page.locator("input#alertbtn").click();
 
+  /*Work on Web Table */
+
+  const countOfRows = await page
+    .locator("(//div[@class='left-align'])[3]/fieldset/table/tbody/tr")
+    .count();
+  console.log("Fetch Number of Rows in a Table: " + countOfRows);
+
+  for (let i = 2; i <= countOfRows; i++) {
+    const countOfColumns = await page
+      .locator(
+        `(//div[@class='left-align'])[3]/fieldset/table/tbody/tr[${i}]/td`,
+      )
+      .count();
+    console.log("Number of Columns in Row:" + i + "are :" + countOfColumns);
+
+    console.log(`Row ${i} has ${countOfColumns} columns`);
+
+    for (let j = 1; j <= countOfColumns; j++) {
+      const cellVal = await page
+        .locator(
+          `(//div[@class='left-align'])[3]/fieldset/table/tbody/tr[${i}]/td[${j}]`,
+        )
+        .textContent();
+
+      console.log(`Row ${i}, column ${j}: ${cellVal.trim()}`);
+      1;
+    }
+
+    console.log("----------------");
+  }
+
+  /** Validate Display Text Box */
+  const textBox = await page.getByPlaceholder("Hide/Show Example");
+  await page.locator("input[value='Show']").click();
+  await expect(textBox).toBeVisible();
+  await textBox.fill(targetCountry);
+
+  const textBoxVal = await textBox.textContent();
+  console.log(textBoxVal);
+
+  await page.locator("input[value='Hide']").click();
+  await expect(textBox).toBeHidden();
+
   // await page.pause();
+
+  /** Mouse Hover */
+
+  const mouseHoverBtn =await page.getByRole('button',{name:'Mouse Hover'});
+  await mouseHoverBtn.hover();
+
+  const options= await page.getByRole('link',{name:'Reload'});
+  await expect(options).toBeVisible();
+  await options.click();
 });
 
 async function searchForCountry(page, countDropdownVal, targetCountry) {
