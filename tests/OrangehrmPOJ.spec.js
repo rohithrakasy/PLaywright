@@ -3,6 +3,7 @@ const { POManager } = require("../pageObjects/POManager");
 
 
 test("Validate Orange HRM portal for POJ model Implementation", async () => {
+  // const browser = await chromium.launch({ headless: false });
   const browser = await firefox.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
