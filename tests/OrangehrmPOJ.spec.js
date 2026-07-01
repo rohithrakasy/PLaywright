@@ -1,13 +1,15 @@
 const { test, chromium, expect } = require("@playwright/test");
-const { LoginPageOrangeHrm } = require("../pageObjects/LoginPageOrangeHrm");
-const { DashboardPage } = require("../pageObjects/DashboardPage");
+const { POManager } = require("../pageObjects/POManager");
+
 
 test("Validate Orange HRM portal for POJ model Implementation", async () => {
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const loginpage = new LoginPageOrangeHrm(page);
-  const dashboardPage = new DashboardPage(page);
+  const poManager = new POManager(page);
+  const loginpage =await  poManager.getLoginpage();
+  const dashboardPage =await poManager.getDashboardPage();
+  
   const url =
     "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login";
 
@@ -30,6 +32,9 @@ test("Validate Orange HRM portal for POJ model Implementation", async () => {
   );
 
   await dashboardPage.validateDashboardHeader("Dash");
+
+  const menuList= await dashboardPage.getDashboardMenu();
+  console.log(menuList);
 
   // await page.pause();
 });
