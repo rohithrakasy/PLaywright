@@ -2,10 +2,10 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [ gitHubActions ]
+    branches: [gitHubActions]
   pull_request:
-    branches: [ gitHubActions ]
-    types: [ opened, synchronize, reopened ]
+    branches: [gitHubActions]
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
@@ -20,10 +20,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Cache Playwright Firefox
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-firefox-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-firefox-${{ runner.os }}-
 
       - name: Install Playwright Browsers
         run: npx playwright install firefox --with-deps
