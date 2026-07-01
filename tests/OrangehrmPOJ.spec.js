@@ -36,5 +36,5 @@ test("Validate Orange HRM portal for POJ model Implementation", async () => {
   const menuList= await dashboardPage.getDashboardMenu();
   console.log(menuList);
 
-  // await page.pause();
+  
 });
