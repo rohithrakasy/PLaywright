@@ -1,30 +1,26 @@
 // @ts-check
-import { defineConfig, devices } from '@playwright/test';
-import { trace } from 'node:console';
 
-
+const isCI = !!process.env.CI;
 
 const config = {
   testDir: './tests',
 
-  timeout: 30 * 1000,  // Global timeout
+  timeout: 30 * 1000,
 
   expect: {
-    timeout: 5 * 1000  // Assertion timeout
+    timeout: 5 * 1000
   },
 
   use: {
-    browserName: 'firefox',
-    headless: false,
+    browserName: 'chromium',
+    headless: isCI,
     screenshot: 'on',
-    // trace: 'on', // It will add trace for all failed and Passed test cases
-    trace:'on',     //reatain-on-failure --> only generates screenshots when test is failed
+    trace: 'on',
 
-
-    viewport: null,   // ✅ ADD THIS (maximize)
+    viewport: isCI ? { width: 1280, height: 720 } : null,
 
     launchOptions: {
-      args: ['--start-maximized']  // ✅ optional but recommended
+      args: isCI ? [] : ['--start-maximized']
     }
   },
 
