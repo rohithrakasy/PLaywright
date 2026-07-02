@@ -14,7 +14,7 @@ const config = {
   },
 
   use: {
-    browserName: 'firefox',
+    browserName: 'chromium',
     headless: false,
     screenshot: 'on',
     // trace: 'on', // It will add trace for all failed and Passed test cases
