@@ -20,6 +20,10 @@ class DashboardPage{
         return this.fetchmenu.allTextContents();
     }
 
+    async adminModule(){
+        await this.fetchmenu.nth(0).click();
+    }
+
 
 }
 
